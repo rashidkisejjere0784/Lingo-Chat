@@ -8,4 +8,5 @@ Getting started;
 - Run *pip install -r requirements.txt*
 - Create an MySQL DataBase called lingo_chat
 - Import the DB
-- Run *streamlit run Home.py*, Enjoy :)
+- Run *streamlit run Home.py*
+- register new user,Enjoy :)
