@@ -1,5 +1,6 @@
 import streamlit as st
 from sqlalchemy.sql import text
+import bcrypt
 
 st.title("Register into Lingo Chat")
 
@@ -22,10 +23,14 @@ if submit:
     if password != confirm_password:
         st.error("Password mismatch")
     else:
+      # Hash the password before storing it
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        
         conn = st.connection('mysql', type='sql')
         with conn.session as s:
             result = s.execute(
-                text(f"INSERT INTO users (name, email, password) VALUES ('{name}', '{email}', '{password}');")
+                text(f"INSERT INTO users (name, email, password) VALUES (:name, :email, :password)"),
+                {'name': name, 'email': email, 'password': hashed_password}
             )
             
             s.commit()
