@@ -19,7 +19,7 @@ email = st.session_state['email']
 if "view_chat" in st.session_state:
     st.switch_page('pages/view_chat.py')
 
-st.markdown(f"""<h1 style='text-align: center'>Hi {name}, Select someone to chat with:</h1>""", unsafe_allow_html=True)
+st.markdown(f"""<h1 style='text-align: center ; color: #10B981 ; font-size: 2.5rem; font-weight: bold;'>Hi {name}, Select someone to chat with:</h1>""", unsafe_allow_html=True)
 
 with conn.session as s:
     all_chats = s.execute(

@@ -6,10 +6,34 @@ if 'message' in st.session_state:
     st.warning("Please Login before viewing the Chats")
     st.session_state.clear()
     
-st.title("Log into Lingo Chat")
+st.markdown(
+    """
+    <div style="text-align: center; padding: 1rem;">
+        <h1 style="color: #10B981; font-size: 2.5rem; font-weight: bold;">
+            Log in  to Lingo Chat
+        </h1>
+        
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-email = st.text_input("Enter your Email")
-password = st.text_input("Enter your password", type='password')
+st.markdown(
+    """
+    <style>
+    .error {
+        color: red; /* Error message color */
+    }
+    .success {
+        color: green; /* Success message color */
+    }
+
+    <style/>
+    """,
+    unsafe_allow_html=True
+)
+email = st.text_input("✉️ Enter your Email")
+password = st.text_input("🔑  Enter your password", type='password')
 
 submit = st.button("Login")
 
@@ -36,7 +60,7 @@ if submit:
         st.session_state['name'] = user[1]
         st.session_state['email'] = user[2]
         
-        st.success("Login successful!")
+        st.success("🎉 Login successful! ", icon="✅")
         st.switch_page("pages/chat.py") # Navigate to chat page
         
     else:
