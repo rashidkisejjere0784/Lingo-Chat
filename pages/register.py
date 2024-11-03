@@ -12,7 +12,7 @@ st.markdown(
     }
     .header {
         text-align: center;
-        color: #4CAF50; /* Theme color */
+        color: #10B981; /* Theme color */
         font-size: 2.5rem;
         font-weight: bold;
         margin: 20px 0;
@@ -42,7 +42,7 @@ st.markdown(
         padding: 12px;
         border: none;
         border-radius: 5px;
-        background-color: #4CAF50; /* Theme color */
+        background-color: #10B981; /* Theme color */
         color: white;
         font-weight: bold;
         font-size: 1rem;
