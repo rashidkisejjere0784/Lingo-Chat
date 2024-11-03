@@ -1,7 +1,6 @@
 import streamlit as st
 from sqlalchemy.sql import text
 
-
 conn = st.connection("mysql", type='sql')
 
 if 'message' in st.session_state:
@@ -16,27 +15,31 @@ user_id = st.session_state['user id']
 name = st.session_state['name']
 email = st.session_state['email']
 
+# Logout functionality
+if st.button("Logout"):
+    del st.session_state['user id']
+    del st.session_state['name']
+    del st.session_state['email']
+    st.session_state['message'] = "Logged out successfully."
+    st.experimental_rerun()  # Reload the app
+
 if "view_chat" in st.session_state:
     st.switch_page('pages/view_chat.py')
 
-st.markdown(f"""<h1 style='text-align: center ; color: #10B981 ; font-size: 2.5rem; font-weight: bold;'>Hi {name}, Select someone to chat with:</h1>""", unsafe_allow_html=True)
+st.markdown(f"""<h1 style='text-align: center; color: #10B981; font-size: 2.5rem; font-weight: bold;'>Hi {name}, Select someone to chat with:</h1>""", unsafe_allow_html=True)
+
+
+
+# Search functionality
+search_query = st.text_input("Search for a chat partner:", "")
 
 with conn.session as s:
     all_chats = s.execute(
-        text(f"SELECT id, name FROM users WHERE id != {user_id}")
-    )
+        text(f"SELECT id, name FROM users WHERE id != :user_id AND name LIKE :search_query"),
+        {'user_id': user_id, 'search_query': f'%{search_query}%'}
+    ).fetchall()
     
     s.commit()
-
-def on_input_change():
-    user_input = st.session_state.user_input
-    st.session_state.past.append(user_input)
-    st.session_state.generated.append("The messages from Bot\nWith new line")
-
-def on_btn_click():
-    del st.session_state.past[:]
-    del st.session_state.generated[:]
-
 
 def display_chat(partner_id, partner_name):
     # Create the messages table if it doesn't exist
@@ -54,7 +57,6 @@ def display_chat(partner_id, partner_name):
     
     with conn.session as s:
         s.execute(text(create_table_query))
-
         s.commit()
     
     st.session_state['view_chat'] = True
@@ -63,7 +65,7 @@ def display_chat(partner_id, partner_name):
     st.session_state['table_name'] = f"messages_{data_order[0]}_{data_order[1]}"
     
     st.experimental_rerun()
-   
+
 # Display the list of available chat partners in a scrollable container
 partners = st.expander("Available Partners:", expanded=False)
 with partners:
